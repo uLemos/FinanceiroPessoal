@@ -35,7 +35,7 @@ API REST desenvolvida em Java com Spring Boot para controle financeiro pessoal. 
 src
 └── main
     └── java
-        └── com.fernandolemos.financeiro
+        └── com.financeiro.backend
             ├── domain
             │   ├── entity
             │   ├── enums
@@ -88,13 +88,13 @@ src
 1. Clone este repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/financeiro.git
+git clone https://github.com/seu-usuario/FinanceiroPessoal.git
 ```
 
 2. Navegue até a pasta do projeto:
 
 ```bash
-cd financeiro
+cd FinanceiroPessoal
 ```
 
 3. Configure o banco de dados PostgreSQL localmente (ou via Docker) e atualize o `application.yml`
