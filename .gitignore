@@ -1,0 +1,52 @@
+# === Node / React / Vite (frontend) ===
+node_modules/
+dist/
+.vite/
+.env
+.env.*.local
+*.log
+
+# Next.js ou shadcn-related build cache (em caso de migração futura)
+.next/
+.out/
+
+# Tailwind
+tailwind.config.js.backup
+
+# === Java / Spring Boot (backend) ===
+target/
+*.class
+*.jar
+*.war
+*.log
+hs_err_pid*
+*.iml
+
+# IntelliJ / VSCode / Eclipse
+.idea/
+.vscode/
+*.iws
+*.ipr
+*.bak
+*.swp
+.DS_Store
+
+# Maven / Gradle
+.mvn/
+!**/src/**/.mvn/wrapper/maven-wrapper.jar
+**/build/
+.gradle/
+**/logs/
+
+# OS / sistema operacional
+Thumbs.db
+.DS_Store
+
+# === Optional Git specific ===
+.git/
+*.orig
+
+# === Optional backups ===
+*.tmp
+*.bak
+*.old
