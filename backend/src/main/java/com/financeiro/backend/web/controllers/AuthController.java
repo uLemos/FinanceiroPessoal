@@ -5,9 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.financeiro.backend.application.services.AuthService;
-import com.financeiro.backend.web.dtos.auth.AuthRequest;
-import com.financeiro.backend.web.dtos.auth.AuthResponse;
-import com.financeiro.backend.web.dtos.register.RegisterRequest;
+import com.financeiro.backend.web.dtos.auth.AuthRequestDTO;
+import com.financeiro.backend.web.dtos.auth.AuthResponseDTO;
+import com.financeiro.backend.web.dtos.auth.RegisterRequestDTO;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,16 +21,16 @@ public class AuthController {
   private AuthService authService;
 
   @PostMapping("/register")
-  public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+  public ResponseEntity<String> register(@RequestBody RegisterRequestDTO request) {
       authService.registrar(request.getNome(), request.getEmail(), request.getSenha());
       return ResponseEntity.ok("Usuário registrado com sucesso!");
   }
   
   @PostMapping("/login")
-  public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
+  public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request) {
     String token = authService.autenticar(request.getEmail(), request.getSenha());
     
-    return ResponseEntity.ok(new AuthResponse(token)) ;
+    return ResponseEntity.ok(new AuthResponseDTO(token)) ;
   }
   
 }

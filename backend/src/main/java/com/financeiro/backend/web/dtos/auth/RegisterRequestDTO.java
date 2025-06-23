@@ -1,9 +1,17 @@
 package com.financeiro.backend.web.dtos.auth;
 
-public class AuthRequest {
+public class RegisterRequestDTO {
+  
+  private String nome;
   private String email;
   private String senha;
-  
+
+  public String getNome() {
+    return nome;
+  }
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
   public String getEmail() {
     return email;
   }
