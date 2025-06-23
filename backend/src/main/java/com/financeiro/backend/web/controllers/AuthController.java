@@ -8,10 +8,8 @@ import com.financeiro.backend.application.services.AuthService;
 import com.financeiro.backend.web.dtos.auth.AuthRequestDTO;
 import com.financeiro.backend.web.dtos.auth.AuthResponseDTO;
 import com.financeiro.backend.web.dtos.auth.RegisterRequestDTO;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 
 @RestController
 @RequestMapping("/auth")
@@ -29,8 +27,6 @@ public class AuthController {
   @PostMapping("/login")
   public ResponseEntity<AuthResponseDTO> login(@RequestBody AuthRequestDTO request) {
     String token = authService.autenticar(request.getEmail(), request.getSenha());
-    
     return ResponseEntity.ok(new AuthResponseDTO(token)) ;
   }
-  
 }

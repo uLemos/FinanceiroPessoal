@@ -1,6 +1,6 @@
 package com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 public class LancamentoFinanceiroRequestDTO {
   
@@ -8,7 +8,7 @@ public class LancamentoFinanceiroRequestDTO {
   private float valor;
   private String tipo;
   private String categoria;
-  private Date data;
+  private LocalDate data;
 
   public String getDescricao() {
     return descricao;
@@ -34,10 +34,10 @@ public class LancamentoFinanceiroRequestDTO {
   public void setCategoria(String categoria) {
     this.categoria = categoria;
   }
-  public Date getData() {
+  public LocalDate getData() {
     return data;
   }
-  public void setData(Date data) {
+  public void setData(LocalDate data) {
     this.data = data;
   }
 }

@@ -5,6 +5,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,7 +39,7 @@ public class LancamentoFinanceiroServiceTest {
     requestDTO.setValor(3000.00f);
     requestDTO.setTipo("Receita");
     requestDTO.setCategoria("Trabalho");
-    requestDTO.setData(Date.valueOf("2025-06-01"));
+    requestDTO.setData(LocalDate.now());
 
     LancamentoFinanceiro entity = LancamentoFinanceiroMapper.toEntity(requestDTO);
     // Simulando o retorno do banco, que atribui o ID
@@ -63,5 +67,44 @@ public class LancamentoFinanceiroServiceTest {
     assertEquals(responseDTO.getData(), resultado.getData());
 
     verify(lancamentoFinanceiroRepository, times(1)).save(entity);
+  }
+
+  @Test
+  void deveBuscarLancamentoPorFiltro(){
+    //Arrange
+    LocalDate dataInicio = LocalDate.of(2025, 6, 1);
+    LocalDate dataFim = LocalDate.of(2025, 6, 30);
+    String categoria = "Moradia";
+    String tipo = "Despesa";
+
+    LancamentoFinanceiro lancamento1 = new LancamentoFinanceiro();
+    lancamento1.setId(1L);
+    lancamento1.setDescricao("Aluguel");
+    lancamento1.setValor(1200.0f);
+    lancamento1.setTipo("Despesa");
+    lancamento1.setCategoria("Moradia");
+    lancamento1.setData(LocalDate.of(2025, 6, 5));
+
+    LancamentoFinanceiro lancamento2 = new LancamentoFinanceiro();
+    lancamento2.setId(2L);
+    lancamento2.setDescricao("Condomínio");
+    lancamento2.setValor(300.0f);
+    lancamento2.setTipo("Despesa");
+    lancamento2.setCategoria("Moradia");
+    lancamento2.setData(LocalDate.of(2025, 6, 10));
+
+    List<LancamentoFinanceiro> mockLancamentos = Arrays.asList(lancamento1, lancamento2);
+
+    when(lancamentoFinanceiroRepository.buscarPorFiltros(dataInicio, dataFim, categoria, tipo)).thenReturn(mockLancamentos);
+
+    //Act
+    List<LancamentoFinanceiroResponseDTO> resultado = lancamentoFinanceiroService.buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
+
+    //Assert
+    assertEquals(2, resultado.size());
+    assertEquals("Aluguel", resultado.get(0).getDescricao());
+    assertEquals("Condomínio", resultado.get(1).getDescricao());
+
+    verify(lancamentoFinanceiroRepository, times(1)).buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
   }
 }

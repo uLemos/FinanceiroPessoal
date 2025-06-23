@@ -1,6 +1,7 @@
 package com.financeiro.backend.domain.entitys;
 
-import java.sql.Date;
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +21,7 @@ public class LancamentoFinanceiro {
   private float valor;
   private String tipo;
   private String categoria;
-  private Date data;
+  private LocalDate data;
 
   @ManyToOne
   private Usuario usuario;
@@ -55,10 +56,10 @@ public class LancamentoFinanceiro {
   public void setCategoria(String categoria) {
     this.categoria = categoria;
   }
-  public Date getData() {
+  public LocalDate getData() {
     return data;
   }
-  public void setData(Date data) {
+  public void setData(LocalDate data) {
     this.data = data;
   }
   public Usuario getUsuario() {
