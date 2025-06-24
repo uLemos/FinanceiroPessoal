@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -19,6 +21,8 @@ import com.financeiro.backend.domain.entitys.LancamentoFinanceiro;
 import com.financeiro.backend.domain.repositories.LancamentoFinanceiroRepository;
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroRequestDTO;
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroResponseDTO;
+import com.financeiro.backend.web.dtos.entitys.relatorioResumo.RelatorioPorCategoriaDTO;
+import com.financeiro.backend.web.dtos.entitys.relatorioResumo.RelatorioResumoDTO;
 import com.financeiro.backend.web.mappers.LancamentoFinanceiroMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -162,5 +166,90 @@ public class LancamentoFinanceiroServiceTest {
     //Assert
     verify(lancamentoFinanceiroRepository, times(1)).findById(id);
     verify(lancamentoFinanceiroRepository, times(1)).delete(lancamento);
+  }
+
+  @Test 
+  void deveGerarResumoComSucesso(){
+    //Arrange
+    LocalDate dataInicio = LocalDate.of(2025, 6, 1);
+    LocalDate dataFim = LocalDate.of(2025, 6, 30);
+
+    BigDecimal totalReceitas = new BigDecimal("5000.00");
+    BigDecimal totalDespesas = new BigDecimal("2000.00");
+
+    when(lancamentoFinanceiroRepository.somarPorTipoEData("Receita", dataInicio, dataFim)).thenReturn(totalReceitas);
+    when(lancamentoFinanceiroRepository.somarPorTipoEData("Despesa", dataInicio, dataFim)).thenReturn(totalDespesas);
+
+    //Act
+    RelatorioResumoDTO resumo = lancamentoFinanceiroService.gerarResumoPorPeriodo(dataInicio, dataFim);
+
+    //Assert
+    assertEquals(new BigDecimal("5000.00"), resumo.getReceitaTotal());
+    assertEquals(new BigDecimal("2000.00"), resumo.getDespesaTotal());
+    assertEquals(new BigDecimal("3000.00"), resumo.getSaldo());
+
+    verify(lancamentoFinanceiroRepository, times(1)).somarPorTipoEData("Receita", dataInicio, dataFim);
+    verify(lancamentoFinanceiroRepository, times(1)).somarPorTipoEData("Despesa", dataInicio, dataFim);
+  }
+
+  @Test
+  void deveGerarResumoComValoresNulos() {
+      // Arrange
+      LocalDate dataInicio = LocalDate.of(2025, 6, 1);
+      LocalDate dataFim = LocalDate.of(2025, 6, 30);
+
+      when(lancamentoFinanceiroRepository.somarPorTipoEData("Receita", dataInicio, dataFim)).thenReturn(null);
+      when(lancamentoFinanceiroRepository.somarPorTipoEData("Despesa", dataInicio, dataFim)).thenReturn(null);
+
+      // Act
+      RelatorioResumoDTO resumo = lancamentoFinanceiroService.gerarResumoPorPeriodo(dataInicio, dataFim);
+
+      // Assert
+      assertEquals(BigDecimal.ZERO, resumo.getReceitaTotal());
+      assertEquals(BigDecimal.ZERO, resumo.getDespesaTotal());
+      assertEquals(BigDecimal.ZERO, resumo.getSaldo());
+  }
+
+  @Test
+  void deveGerarResumoPorCategoriaComSucesso(){
+    //Arrange
+    LocalDate dataInicio = LocalDate.of(2025,6,1);
+    LocalDate dataFim = LocalDate.of(2025, 6, 30);
+
+    List<RelatorioPorCategoriaDTO> mockResultado = Arrays.asList(
+      new RelatorioPorCategoriaDTO("Moradia", new BigDecimal("1500.00")),
+      new RelatorioPorCategoriaDTO("Alimentação", new BigDecimal("600.00"))
+    );
+
+    when(lancamentoFinanceiroRepository.somarRelatorioPorCategoriaEntreDatas(dataInicio, dataFim)).thenReturn(mockResultado);
+
+    //Act
+    List<RelatorioPorCategoriaDTO> resultado = lancamentoFinanceiroService.gerarResumoPorCategoria(dataInicio, dataFim);
+  
+    //Assert
+    assertEquals(2, resultado.size());
+    assertEquals("Moradia", resultado.get(0).getCategoria());
+    assertEquals(new BigDecimal("1500.00"), resultado.get(0).getTotal());
+    assertEquals("Alimentação", resultado.get(1).getCategoria());
+    assertEquals(new BigDecimal("600.00"), resultado.get(1).getTotal());
+
+    verify(lancamentoFinanceiroRepository, times(1)).somarRelatorioPorCategoriaEntreDatas(dataInicio, dataFim);
+  }
+
+  @Test
+  void deveRetornarListaVaziaQuandoNaoHouverLancamentosNaData(){
+    //Arrange
+    LocalDate dataInicio = LocalDate.of(2025, 1, 1);
+    LocalDate dataFim = LocalDate.of(2025, 1, 31);
+
+    when(lancamentoFinanceiroRepository.somarRelatorioPorCategoriaEntreDatas(dataInicio, dataFim)).thenReturn(List.of());
+
+    //Act
+    List<RelatorioPorCategoriaDTO> resultado = lancamentoFinanceiroService.gerarResumoPorCategoria(dataInicio, dataFim);
+
+    //Assert
+    assertEquals(0, resultado.size());
+    
+    verify(lancamentoFinanceiroRepository, times(1)).somarRelatorioPorCategoriaEntreDatas(dataInicio, dataFim);
   }
 }

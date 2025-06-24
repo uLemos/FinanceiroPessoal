@@ -1,4 +1,4 @@
-package com.financeiro.backend.web.dtos.entitys.lancamentoFiltro;
+package com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro;
 
 import java.time.LocalDate;
 
