@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -104,6 +105,15 @@ public class AuthServiceTest {
       usuario.getEmail().equals(email) &&
       usuario.getSenha().equals(senhaCriptografada) 
     ));
+
+    // ArgumentCaptor<Usuario> captor = ArgumentCaptor.forClass(Usuario.class);
+    // verify(usuarioRespository).save(captor.capture());
+
+    // Usuario usuarioSalvo = captor.getValue();
+
+    // assertEquals(nome, usuarioSalvo.getNome());
+    // assertEquals(email, usuarioSalvo.getEmail());
+    // assertEquals(senhaCriptografada, usuarioSalvo.getSenha());
   }
 
   @Test

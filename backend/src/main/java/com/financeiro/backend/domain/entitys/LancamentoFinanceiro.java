@@ -1,5 +1,6 @@
 package com.financeiro.backend.domain.entitys;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
@@ -18,7 +19,7 @@ public class LancamentoFinanceiro {
   private Long id;
   
   private String descricao;
-  private float valor;
+  private BigDecimal valor;
   private String tipo;
   private String categoria;
   private LocalDate data;
@@ -38,10 +39,10 @@ public class LancamentoFinanceiro {
   public void setDescricao(String descricao) {
     this.descricao = descricao;
   }
-  public float getValor() {
+  public BigDecimal getValor() {
     return valor;
   }
-  public void setValor(float valor) {
+  public void setValor(BigDecimal valor) {
     this.valor = valor;
   }
   public String getTipo() {

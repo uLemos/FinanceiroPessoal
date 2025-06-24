@@ -1,11 +1,12 @@
 package com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class LancamentoFinanceiroRequestDTO {
   
   private String descricao;
-  private float valor;
+  private BigDecimal valor;
   private String tipo;
   private String categoria;
   private LocalDate data;
@@ -16,10 +17,10 @@ public class LancamentoFinanceiroRequestDTO {
   public void setDescricao(String descricao) {
     this.descricao = descricao;
   }
-  public float getValor() {
+  public BigDecimal getValor() {
     return valor;
   }
-  public void setValor(float valor) {
+  public void setValor(BigDecimal valor) {
     this.valor = valor;
   }
   public String getTipo() {

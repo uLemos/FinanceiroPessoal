@@ -1,17 +1,16 @@
 package com.financeiro.backend.application.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +22,6 @@ import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFi
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroResponseDTO;
 import com.financeiro.backend.web.dtos.entitys.relatorioResumo.RelatorioPorCategoriaDTO;
 import com.financeiro.backend.web.dtos.entitys.relatorioResumo.RelatorioResumoDTO;
-import com.financeiro.backend.web.mappers.LancamentoFinanceiroMapper;
 
 @ExtendWith(MockitoExtension.class)
 public class LancamentoFinanceiroServiceTest {
@@ -38,40 +36,45 @@ public class LancamentoFinanceiroServiceTest {
   void DeveCriarLancamentoComSucesso(){
     
     //Arrange
-
     LancamentoFinanceiroRequestDTO requestDTO = new LancamentoFinanceiroRequestDTO();
     requestDTO.setDescricao("Salário");
-    requestDTO.setValor(3000.00f);
+    requestDTO.setValor(new BigDecimal("3000.00"));
     requestDTO.setTipo("Receita");
     requestDTO.setCategoria("Trabalho");
     requestDTO.setData(LocalDate.now());
 
-    LancamentoFinanceiro entity = LancamentoFinanceiroMapper.toEntity(requestDTO);
+    // LancamentoFinanceiro entity = LancamentoFinanceiroMapper.toEntity(requestDTO);
     // Simulando o retorno do banco, que atribui o ID
     LancamentoFinanceiro entityComId = new LancamentoFinanceiro();
     entityComId.setId(1L);
-    entityComId.setDescricao(entity.getDescricao());
-    entityComId.setValor(entity.getValor());
-    entityComId.setTipo(entity.getTipo());
-    entityComId.setCategoria(entity.getCategoria());
-    entityComId.setData(entity.getData());
+    entityComId.setDescricao(requestDTO.getDescricao());
+    entityComId.setValor(requestDTO.getValor());
+    entityComId.setTipo(requestDTO.getTipo());
+    entityComId.setCategoria(requestDTO.getCategoria());
+    entityComId.setData(requestDTO.getData());
 
-    LancamentoFinanceiroResponseDTO responseDTO = LancamentoFinanceiroMapper.toResponseDTO(entityComId);
+    // LancamentoFinanceiroResponseDTO responseDTO = LancamentoFinanceiroMapper.toResponseDTO(entityComId);
 
-    when(lancamentoFinanceiroRepository.save(entity)).thenReturn(entityComId);
+    when(lancamentoFinanceiroRepository.save(argThat(l -> 
+      l.getDescricao().equals(requestDTO.getDescricao()) &&
+      l.getValor().equals(requestDTO.getValor()) &&
+      l.getTipo().equals(requestDTO.getTipo()) &&
+      l.getCategoria().equals(requestDTO.getCategoria()) &&
+      l.getData().equals(requestDTO.getData())
+    ))).thenReturn(entityComId);
 
-    //Act
+    // Act
     LancamentoFinanceiroResponseDTO resultado = lancamentoFinanceiroService.criarLancamento(requestDTO);
 
-    //Assert
-    assertEquals(responseDTO.getId(), resultado.getId());
-    assertEquals(responseDTO.getDescricao(), resultado.getDescricao());
-    assertEquals(responseDTO.getValor(), resultado.getValor());
-    assertEquals(responseDTO.getTipo(), resultado.getTipo());
-    assertEquals(responseDTO.getCategoria(), resultado.getCategoria());
-    assertEquals(responseDTO.getData(), resultado.getData());
+    // Assert
+    assertEquals(entityComId.getId(), resultado.getId());
+    assertEquals(entityComId.getDescricao(), resultado.getDescricao());
+    assertEquals(entityComId.getValor(), resultado.getValor());
+    assertEquals(entityComId.getTipo(), resultado.getTipo());
+    assertEquals(entityComId.getCategoria(), resultado.getCategoria());
+    assertEquals(entityComId.getData(), resultado.getData());
 
-    verify(lancamentoFinanceiroRepository, times(1)).save(entity);
+    verify(lancamentoFinanceiroRepository, times(1)).save(any(LancamentoFinanceiro.class));
   }
 
   @Test
@@ -85,7 +88,7 @@ public class LancamentoFinanceiroServiceTest {
     LancamentoFinanceiro lancamento1 = new LancamentoFinanceiro();
     lancamento1.setId(1L);
     lancamento1.setDescricao("Aluguel");
-    lancamento1.setValor(1200.0f);
+    lancamento1.setValor(new BigDecimal("1200.00"));
     lancamento1.setTipo("Despesa");
     lancamento1.setCategoria("Moradia");
     lancamento1.setData(LocalDate.of(2025, 6, 5));
@@ -93,7 +96,7 @@ public class LancamentoFinanceiroServiceTest {
     LancamentoFinanceiro lancamento2 = new LancamentoFinanceiro();
     lancamento2.setId(2L);
     lancamento2.setDescricao("Condomínio");
-    lancamento2.setValor(300.0f);
+    lancamento2.setValor(new BigDecimal("300.00"));
     lancamento2.setTipo("Despesa");
     lancamento2.setCategoria("Moradia");
     lancamento2.setData(LocalDate.of(2025, 6, 10));
@@ -120,7 +123,7 @@ public class LancamentoFinanceiroServiceTest {
 
     LancamentoFinanceiroRequestDTO dto = new LancamentoFinanceiroRequestDTO();
     dto.setDescricao("Mercado");
-    dto.setValor(250.0f);
+    dto.setValor(new BigDecimal("250.00"));
     dto.setTipo("Despesa");
     dto.setCategoria("Alimentação");
     dto.setData(LocalDate.of(2025, 6, 20));
@@ -128,7 +131,7 @@ public class LancamentoFinanceiroServiceTest {
     LancamentoFinanceiro existente = new LancamentoFinanceiro();
     existente.setId(id);
     existente.setDescricao("Antiga");
-    existente.setValor(100.0f);
+    existente.setValor(new BigDecimal("100.00"));
     existente.setTipo("Despesa");
     existente.setCategoria("Outros");
     existente.setData(LocalDate.of(2025, 6, 10));
