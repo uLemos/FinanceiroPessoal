@@ -13,13 +13,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/lancamentos")
 public class LancamentoFinanceiroController {
   
   private final LancamentoFinanceiroService lancamentoFinanceiroService;
@@ -28,13 +32,13 @@ public class LancamentoFinanceiroController {
     this.lancamentoFinanceiroService = lancamentoFinanceiroService;
   }
 
-  @PostMapping("/lancamentos")
+  @PostMapping
   public ResponseEntity<LancamentoFinanceiroResponseDTO> criarLancamento(@RequestBody LancamentoFinanceiroRequestDTO requestDTO) {
       LancamentoFinanceiroResponseDTO responseDTO = lancamentoFinanceiroService.criarLancamento(requestDTO);
       return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO); 
   }
 
-  @GetMapping("/lancamentos")
+  @GetMapping
   public ResponseEntity<List<LancamentoFinanceiroResponseDTO>> listarLancamentos(
     @RequestParam(required = false) LocalDate dataInicio,
     @RequestParam(required = false) LocalDate dataFim,
@@ -42,5 +46,16 @@ public class LancamentoFinanceiroController {
     @RequestParam(required = false) String tipo) {
       List<LancamentoFinanceiroResponseDTO> lista = lancamentoFinanceiroService.buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
       return ResponseEntity.ok(lista);
+  }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<LancamentoFinanceiroResponseDTO> atualizarLancamento(@PathVariable Long id, @RequestBody LancamentoFinanceiroRequestDTO dto) {
+      return ResponseEntity.ok(lancamentoFinanceiroService.atualizarLancamento(id, dto));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<LancamentoFinanceiroResponseDTO> deletarFinanceiro(@PathVariable Long id){
+    lancamentoFinanceiroService.deletarLancamento(id);
+    return ResponseEntity.noContent().build();
   }
 }

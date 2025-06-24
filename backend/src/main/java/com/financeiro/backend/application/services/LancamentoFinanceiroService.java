@@ -38,4 +38,27 @@ public class LancamentoFinanceiroService {
     .map(LancamentoFinanceiroMapper::toResponseDTO)
     .toList();
   }
+  
+  @Transactional
+  public LancamentoFinanceiroResponseDTO atualizarLancamento(Long id, LancamentoFinanceiroRequestDTO dto){
+    LancamentoFinanceiro existente = lancamentoFinanceiroRepository.findById(id)
+      .orElseThrow(() -> new RuntimeException("Lançamento não encontrado!"));
+      
+    existente.setDescricao(dto.getDescricao());
+    existente.setValor(dto.getValor());
+    existente.setTipo(dto.getTipo());
+    existente.setCategoria(dto.getCategoria());
+    existente.setData(dto.getData());
+
+    LancamentoFinanceiro atualizado = lancamentoFinanceiroRepository.save(existente);
+    return LancamentoFinanceiroMapper.toResponseDTO(atualizado);
+  }
+
+  @Transactional
+  public void deletarLancamento(Long id){
+    LancamentoFinanceiro lancamento = lancamentoFinanceiroRepository.findById(id)
+      .orElseThrow(() -> new RuntimeException("Lançamento não encontrado!"));
+
+    lancamentoFinanceiroRepository.delete(lancamento);
+  }
 }
