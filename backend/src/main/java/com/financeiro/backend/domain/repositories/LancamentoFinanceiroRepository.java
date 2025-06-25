@@ -30,7 +30,7 @@ public interface LancamentoFinanceiroRepository extends JpaRepository<Lancamento
     @Param("dataInicio") LocalDate dataInicio,
     @Param("dataFim") LocalDate dataFim); 
 
-  @Query("SELECT new com.financeiro.backend.web.dtos.entity.relatorioResumo(l.categoria, SUM(l.valor)) " +
+  @Query("SELECT new com.financeiro.backend.web.dtos.entitys.relatorioResumo.RelatorioPorCategoriaDTO(l.categoria, SUM(l.valor)) " +
     "FROM LancamentoFinanceiro l " + 
     "WHERE l.data BETWEEN :dataInicio AND :dataFim " +
     "GROUP BY l.categoria")

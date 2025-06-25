@@ -3,11 +3,8 @@ package com.financeiro.backend.application.services;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.financeiro.backend.domain.entitys.LancamentoFinanceiro;
 import com.financeiro.backend.domain.repositories.LancamentoFinanceiroRepository;
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroRequestDTO;

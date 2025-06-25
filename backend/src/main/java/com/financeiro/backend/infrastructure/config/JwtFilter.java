@@ -1,13 +1,13 @@
 package com.financeiro.backend.infrastructure.config;
 
 import java.io.IOException;
-import java.util.Collections;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.financeiro.backend.application.services.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,42 +17,48 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtFilter extends OncePerRequestFilter{
   
   private final JwtUtil jwtUtil;
+  private final CustomUserDetailsService customUserDetailsService;
 
-  public JwtFilter(JwtUtil jwtUtil) {
+  public JwtFilter(JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
     this.jwtUtil = jwtUtil;
+    this.customUserDetailsService = customUserDetailsService;
   }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
       throws ServletException, IOException {
+        
     final String authHeader = request.getHeader("Authorization");
 
     String token = null;
     String email = null;
 
     if(authHeader != null && authHeader.startsWith("Bearer ")){
-      // token = authHeader.substring(7);
-      token = authHeader.replaceAll("[B,b]earer\\s", "").trim();
+      token = authHeader.substring(7);
       try {
-        if(jwtUtil.validarToken(token))
         email = jwtUtil.extrairEmail(token);
       } catch (Exception e) {
-        // TODO: handle exception
+        System.out.println("Token inválido ou expirado: " + e.getMessage());
+        filterChain.doFilter(request, response);
+        return;
       }
     }
 
     if(email != null && SecurityContextHolder.getContext().getAuthentication() == null){
-      UsernamePasswordAuthenticationToken authToken = 
-      new UsernamePasswordAuthenticationToken(
-        new User(email, "", Collections.emptyList()),
-        null,
-        Collections.emptyList()                  
-      );
+      UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
+      
+      if(jwtUtil.validarToken(token)){
+        UsernamePasswordAuthenticationToken authToken = 
+        new UsernamePasswordAuthenticationToken(
+          userDetails,
+          null,
+          userDetails.getAuthorities()                 
+        );
 
-      authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-      SecurityContextHolder.getContext().setAuthentication(authToken);
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+     }
     }
-
     filterChain.doFilter(request, response);
   }
 }

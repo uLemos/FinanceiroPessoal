@@ -2,8 +2,14 @@ package com.financeiro.backend.web.dtos.entitys.relatorioResumo;
 
 import java.math.BigDecimal;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class RelatorioPorCategoriaDTO {
+
+  @Schema(description = "Nome da categoria", example = "Alimentação")
   private String categoria;
+
+  @Schema(description = "Total somado para a categoria", example = "1500.75")
   private BigDecimal total;
   
   public RelatorioPorCategoriaDTO(String categoria, BigDecimal total) {

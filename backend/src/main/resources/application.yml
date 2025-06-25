@@ -2,8 +2,8 @@ server:
     port: 3000
 
 jwt:
-    secret: s3cr3t-KL89nm@JkD7*!2vCxZopQYT349!nmLp0
-    expiration: 86400000
+    secret: dXGOKTldQ7fwAyKnTI3QJDalFtXXADISLUnAiqDnq9w=
+    expiration: 3600000 
 
 spring:
     application:
