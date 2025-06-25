@@ -17,6 +17,9 @@ import jakarta.validation.Valid;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,12 +57,13 @@ public class LancamentoFinanceiroController {
       @ApiResponse(responseCode = "200", description = "Lista de lançamentos retornada com sucesso")
   })
   @GetMapping
-  public ResponseEntity<List<LancamentoFinanceiroResponseDTO>> listarLancamentos(
+  public ResponseEntity<Page<LancamentoFinanceiroResponseDTO>> listarLancamentos(
     @Parameter(description = "Data de início do filtro") @RequestParam(required = false) LocalDate dataInicio,
     @Parameter(description = "Data de fim do filtro") @RequestParam(required = false) LocalDate dataFim,
     @Parameter(description = "Categoria do lançamento") @RequestParam(required = false) String categoria,
-    @Parameter(description = "Tipo do lançamento (RECEITA ou DESPESA)") @RequestParam(required = false) String tipo) {
-      List<LancamentoFinanceiroResponseDTO> lista = lancamentoFinanceiroService.buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
+    @Parameter(description = "Tipo do lançamento (RECEITA ou DESPESA)") @RequestParam(required = false) String tipo,
+    Pageable pageable) {
+      Page<LancamentoFinanceiroResponseDTO> lista = lancamentoFinanceiroService.buscarPorFiltros(dataInicio, dataFim, categoria, tipo, pageable);
       return ResponseEntity.ok(lista);
   }
 

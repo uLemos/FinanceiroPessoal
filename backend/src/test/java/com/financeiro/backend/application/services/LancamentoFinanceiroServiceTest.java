@@ -16,6 +16,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+
 import com.financeiro.backend.domain.entitys.LancamentoFinanceiro;
 import com.financeiro.backend.domain.repositories.LancamentoFinanceiroRepository;
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroRequestDTO;
@@ -77,13 +83,54 @@ public class LancamentoFinanceiroServiceTest {
     verify(lancamentoFinanceiroRepository, times(1)).save(any(LancamentoFinanceiro.class));
   }
 
+  // @Test
+  // void deveBuscarLancamentoPorFiltro(){
+  //   //Arrange
+  //   LocalDate dataInicio = LocalDate.of(2025, 6, 1);
+  //   LocalDate dataFim = LocalDate.of(2025, 6, 30);
+  //   String categoria = "Moradia";
+  //   String tipo = "Despesa";
+
+  //   LancamentoFinanceiro lancamento1 = new LancamentoFinanceiro();
+  //   lancamento1.setId(1L);
+  //   lancamento1.setDescricao("Aluguel");
+  //   lancamento1.setValor(new BigDecimal("1200.00"));
+  //   lancamento1.setTipo("Despesa");
+  //   lancamento1.setCategoria("Moradia");
+  //   lancamento1.setData(LocalDate.of(2025, 6, 5));
+
+  //   LancamentoFinanceiro lancamento2 = new LancamentoFinanceiro();
+  //   lancamento2.setId(2L);
+  //   lancamento2.setDescricao("Condomínio");
+  //   lancamento2.setValor(new BigDecimal("300.00"));
+  //   lancamento2.setTipo("Despesa");
+  //   lancamento2.setCategoria("Moradia");
+  //   lancamento2.setData(LocalDate.of(2025, 6, 10));
+
+  //   List<LancamentoFinanceiro> mockLancamentos = Arrays.asList(lancamento1, lancamento2);
+
+  //   when(lancamentoFinanceiroRepository.buscarPorFiltros(dataInicio, dataFim, categoria, tipo)).thenReturn(mockLancamentos);
+
+  //   //Act
+  //   List<LancamentoFinanceiroResponseDTO> resultado = lancamentoFinanceiroService.buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
+
+  //   //Assert
+  //   assertEquals(2, resultado.size());
+  //   assertEquals("Aluguel", resultado.get(0).getDescricao());
+  //   assertEquals("Condomínio", resultado.get(1).getDescricao());
+
+  //   verify(lancamentoFinanceiroRepository, times(1)).buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
+  // }
+
+  @SuppressWarnings("unchecked")
   @Test
-  void deveBuscarLancamentoPorFiltro(){
-    //Arrange
+  void deveBuscarLancamentoPorFiltroComPaginacao() {
+    // Arrange
     LocalDate dataInicio = LocalDate.of(2025, 6, 1);
     LocalDate dataFim = LocalDate.of(2025, 6, 30);
     String categoria = "Moradia";
     String tipo = "Despesa";
+    Pageable pageable = PageRequest.of(0, 10);
 
     LancamentoFinanceiro lancamento1 = new LancamentoFinanceiro();
     lancamento1.setId(1L);
@@ -101,19 +148,20 @@ public class LancamentoFinanceiroServiceTest {
     lancamento2.setCategoria("Moradia");
     lancamento2.setData(LocalDate.of(2025, 6, 10));
 
-    List<LancamentoFinanceiro> mockLancamentos = Arrays.asList(lancamento1, lancamento2);
+    List<LancamentoFinanceiro> lancamentos = Arrays.asList(lancamento1, lancamento2);
+    Page<LancamentoFinanceiro> page = new PageImpl<>(lancamentos, pageable, lancamentos.size());
 
-    when(lancamentoFinanceiroRepository.buscarPorFiltros(dataInicio, dataFim, categoria, tipo)).thenReturn(mockLancamentos);
+    when(lancamentoFinanceiroRepository.findAll((Specification<LancamentoFinanceiro>) any(), (Pageable) any(Pageable.class))).thenReturn(page);
 
-    //Act
-    List<LancamentoFinanceiroResponseDTO> resultado = lancamentoFinanceiroService.buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
+    // Act
+    Page<LancamentoFinanceiroResponseDTO> resultado = lancamentoFinanceiroService.buscarPorFiltros(dataInicio, dataFim, categoria, tipo, pageable);
 
-    //Assert
-    assertEquals(2, resultado.size());
-    assertEquals("Aluguel", resultado.get(0).getDescricao());
-    assertEquals("Condomínio", resultado.get(1).getDescricao());
+    // Assert
+    assertEquals(2, resultado.getContent().size());
+    assertEquals("Aluguel", resultado.getContent().get(0).getDescricao());
+    assertEquals("Condomínio", resultado.getContent().get(1).getDescricao());
 
-    verify(lancamentoFinanceiroRepository, times(1)).buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
+    verify(lancamentoFinanceiroRepository, times(1)).findAll((Specification<LancamentoFinanceiro>) any(), (Pageable) any(Pageable.class));
   }
 
   @Test

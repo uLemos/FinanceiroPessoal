@@ -3,10 +3,15 @@ package com.financeiro.backend.application.services;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.financeiro.backend.domain.entitys.LancamentoFinanceiro;
 import com.financeiro.backend.domain.repositories.LancamentoFinanceiroRepository;
+import com.financeiro.backend.domain.specifications.FiltrosLancamentoSpecification;
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroRequestDTO;
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroResponseDTO;
 import com.financeiro.backend.web.dtos.entitys.relatorioResumo.RelatorioPorCategoriaDTO;
@@ -32,11 +37,16 @@ public class LancamentoFinanceiroService {
   }
 
   @Transactional(readOnly = true)
-  public List<LancamentoFinanceiroResponseDTO> buscarPorFiltros(LocalDate dataInicio, LocalDate dataFim, String categoria, String tipo){
-   List<LancamentoFinanceiro> lancamentos = lancamentoFinanceiroRepository.buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
-   return lancamentos.stream()
-    .map(LancamentoFinanceiroMapper::toResponseDTO)
-    .toList();
+  public Page<LancamentoFinanceiroResponseDTO> buscarPorFiltros(LocalDate dataInicio, LocalDate dataFim, String categoria, String tipo, Pageable pageable){
+    // List<LancamentoFinanceiro> lancamentos = lancamentoFinanceiroRepository.buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
+    Specification<LancamentoFinanceiro> spec = 
+      FiltrosLancamentoSpecification.comCategoria(categoria)
+      .and(FiltrosLancamentoSpecification.comTipo(tipo))
+      .and(FiltrosLancamentoSpecification.comDataEntre(dataInicio, dataFim));
+
+    Page<LancamentoFinanceiro> page = lancamentoFinanceiroRepository.findAll(spec, pageable);
+
+    return page.map(LancamentoFinanceiroMapper::toResponseDTO);
   }
   
   @Transactional
