@@ -7,16 +7,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.financeiro.backend.domain.entitys.Usuario;
+import com.financeiro.backend.domain.enums.Role;
 import com.financeiro.backend.domain.repositories.UsuarioRespository;
 import com.financeiro.backend.infrastructure.config.JwtUtil;
 
@@ -46,6 +47,7 @@ public class AuthServiceTest {
     Usuario usuario = new Usuario();
     usuario.setEmail(email);
     usuario.setSenha(senhaCriptografada);
+    usuario.setRoles(Set.of(Role.ROLE_USER));
 
     when(usuarioRespository.findByEmail(email)).thenReturn(Optional.of(usuario));
     when(passwordEncoder.matches(senha, senhaCriptografada)).thenReturn(true);
@@ -81,6 +83,7 @@ public class AuthServiceTest {
     Usuario usuario = new Usuario();
     usuario.setEmail(email);
     usuario.setSenha(senhaCriptografada);
+    usuario.setRoles(Set.of(Role.ROLE_USER));
 
     when(usuarioRespository.findByEmail(email)).thenReturn(Optional.of(usuario));
     when(passwordEncoder.matches(senha, senhaCriptografada)).thenReturn(false);
@@ -94,6 +97,7 @@ public class AuthServiceTest {
     String email = "fernando@email.com";
     String senha = "123456";
     String senhaCriptografada = "$2a$10$criptografada";
+    Set<Role> role = Set.of(Role.ROLE_USER);
 
     when(usuarioRespository.findByEmail(email)).thenReturn(Optional.empty());
     when(passwordEncoder.encode(senha)).thenReturn(senhaCriptografada);
@@ -103,7 +107,8 @@ public class AuthServiceTest {
     verify(usuarioRespository, times(1)).save(org.mockito.Mockito.argThat(usuario -> 
       usuario.getNome().equals(nome) &&
       usuario.getEmail().equals(email) &&
-      usuario.getSenha().equals(senhaCriptografada) 
+      usuario.getSenha().equals(senhaCriptografada) &&
+      usuario.getRoles().equals(role)
     ));
 
     // ArgumentCaptor<Usuario> captor = ArgumentCaptor.forClass(Usuario.class);

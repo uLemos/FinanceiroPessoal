@@ -1,11 +1,12 @@
 package com.financeiro.backend.application.services;
 
-import org.springframework.security.core.context.SecurityContext;
+import java.util.Set;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.financeiro.backend.domain.entitys.Usuario;
+import com.financeiro.backend.domain.enums.Role;
 import com.financeiro.backend.domain.repositories.UsuarioRespository;
 import com.financeiro.backend.infrastructure.config.JwtUtil;
 
@@ -40,6 +41,7 @@ public class AuthService {
     novoUsuario.setNome(nome);
     novoUsuario.setEmail(email);
     novoUsuario.setSenha(passwordEncoder.encode(senha));
+    novoUsuario.setRoles(Set.of(Role.ROLE_USER));
     
     usuarioRespository.save(novoUsuario);
   }

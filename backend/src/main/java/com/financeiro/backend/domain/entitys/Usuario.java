@@ -1,9 +1,21 @@
 package com.financeiro.backend.domain.entitys;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.financeiro.backend.domain.enums.Role;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,6 +29,12 @@ public class Usuario {
   private String nome;
   private String email;
   private String senha;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  @Enumerated(EnumType.STRING)
+  @CollectionTable(name = "usuario_roles", joinColumns = @JoinColumn(name = "usuario_id"))
+  @Column(name = "role")
+  private Set<Role> roles = new HashSet<>();
 
   public Long getId() {
     return id;
@@ -42,10 +60,10 @@ public class Usuario {
   public void setSenha(String senha) {
     this.senha = senha;
   }
-  // public Date getDataCriacao() {
-  //   return dataCriacao;
-  // }
-  // public void setDataCriacao(Date dataCriacao) {
-  //   this.dataCriacao = dataCriacao;
-  // }
+  public Set<Role> getRoles() {
+    return roles;
+  }
+  public void setRoles(Set<Role> roles) {
+    this.roles = roles;
+  }
 }
