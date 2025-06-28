@@ -1,5 +1,8 @@
 package com.financeiro.backend.application.services;
 
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.financeiro.backend.domain.entitys.Usuario;
@@ -39,5 +42,10 @@ public class AuthService {
     novoUsuario.setSenha(passwordEncoder.encode(senha));
     
     usuarioRespository.save(novoUsuario);
+  }
+
+  public Usuario getUsuarioLogado(){
+    return usuarioRespository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName())
+      .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado."));
   }
 }

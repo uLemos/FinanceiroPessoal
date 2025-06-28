@@ -1,39 +1,28 @@
-server:
-    port: 3000
+#| Ambiente            | Comando                                                                                                                    |
+#| ------------------- | ---------------------------------------------------------------------------------------------------------------------------|
+#| **Dev (H2)**        | `docker-compose up --build` #Futuramente se necessário                                                                     |
+#| **Dev (H2-memória)**| `mvn clean package -Dspring.profiles.active=dev` `java -jar target/backend-0.0.1-SNAPSHOT.jar --spring.profiles.active=dev`|
+#| **Prod (Postgres)** | `docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build`                                               |
 
-jwt:
-    secret: dXGOKTldQ7fwAyKnTI3QJDalFtXXADISLUnAiqDnq9w=
-    expiration: 3600000 
+# Comando para DEBUG #
+# mvn spring-boot:run -Dspring-boot.run.profiles=dev -Dspring-boot.run.jvmArguments="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+
+# Comando para RUN #
+# mvn spring-boot:run -Dspring-boot.run.profiles=dev 
+
+# Comando para BUILD #
+# mvn clean package
+
+# Comando para TEST #
+# mvn test
 
 spring:
-    application:
-        name: financeiro-api
-# datasource: 
-#  url:
-#  username:
-#  password:
-#  driver-class-name:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}  # Altere para 'prod' quando for subir o ambiente de produção ou use mvn clean package -Dspring.profiles.active=prod|dev
 
-    datasource:
-        url: jdbc:h2:mem:financeirodb
-        driver-class-name: org.h2.Driver
-        username: sa
-        password:
+server:
+  port: 3000
 
-    sql:
-        init:
-            platform: h2
-
-    h2:
-        console:
-            enabled: true
-            path: /h2-console
-
-    jpa:
-        hibernate:
-            ddl-auto: update
-        show-sql: true
-        properties:
-            hibernate:
-                'format_sql': true
-       
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION} 

@@ -1,6 +1,5 @@
 package com.financeiro.backend.domain.entitys;
 
-import java.sql.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "usuario")
 public class Usuario {
 
   @Id
@@ -18,7 +17,6 @@ public class Usuario {
   private String nome;
   private String email;
   private String senha;
-  private Date dataCriacao;
 
   public Long getId() {
     return id;
@@ -44,10 +42,10 @@ public class Usuario {
   public void setSenha(String senha) {
     this.senha = senha;
   }
-  public Date getDataCriacao() {
-    return dataCriacao;
-  }
-  public void setDataCriacao(Date dataCriacao) {
-    this.dataCriacao = dataCriacao;
-  }
+  // public Date getDataCriacao() {
+  //   return dataCriacao;
+  // }
+  // public void setDataCriacao(Date dataCriacao) {
+  //   this.dataCriacao = dataCriacao;
+  // }
 }

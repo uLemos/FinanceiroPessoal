@@ -22,15 +22,19 @@ import com.financeiro.backend.web.mappers.LancamentoFinanceiroMapper;
 public class LancamentoFinanceiroService {
   
   private final LancamentoFinanceiroRepository lancamentoFinanceiroRepository;
+  private final AuthService authService;
 
-  public LancamentoFinanceiroService(LancamentoFinanceiroRepository lancamentoFinanceiroRepository) {
+  public LancamentoFinanceiroService(LancamentoFinanceiroRepository lancamentoFinanceiroRepository, AuthService authService) {
     this.lancamentoFinanceiroRepository = lancamentoFinanceiroRepository;
+    this.authService = authService;
   }
 
   @Transactional
   public LancamentoFinanceiroResponseDTO criarLancamento(LancamentoFinanceiroRequestDTO requestDTO){
-
+    
     LancamentoFinanceiro lancamento = LancamentoFinanceiroMapper.toEntity(requestDTO);
+    lancamento.setUsuario(authService.getUsuarioLogado());
+
     LancamentoFinanceiro lancamentoSalvo = lancamentoFinanceiroRepository.save(lancamento);
 
     return LancamentoFinanceiroMapper.toResponseDTO(lancamentoSalvo);

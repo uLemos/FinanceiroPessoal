@@ -1,10 +1,35 @@
-HELP.md
+# 👉 Arquivos e pastas geradas pelo Maven
 target/
 .mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
 
-### STS ###
+# 🐳 Docker volumes, arquivos temporários e logs
+db_data/
+**/db_data/
+**/pgdata/
+*.log
+*.tmp
+*.pid
+.env
+docker-compose.override.yml
+docker-compose*.local.yml
+
+# 🔧 Build de produção (caso gere artefatos extras no futuro)
+*.mk
+
+# 🧪 IDEs
+## IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+## Eclipse / Spring Tool Suite
 .apt_generated
 .classpath
 .factorypath
@@ -13,21 +38,18 @@ target/
 .springBeans
 .sts4-cache
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+## NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
+## Visual Studio Code
 .vscode/
+
+# 🖼️ Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# ⚠️ Evite adicionar arquivos sensíveis ou variáveis de ambiente aqui, sempre use .env com cautela.

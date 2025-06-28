@@ -25,7 +25,7 @@ public class LancamentoFinanceiroRequestDTO {
   @Schema(description = "Categoria do lançamento financeiro", example = "Alimentação", required = true)
   private String categoria;
 
-  @NotBlank(message = "A data é obrigatória")
+  @NotNull(message = "A data é obrigatória")
   @Schema(description = "Data do lançamento financeiro", example = "2025-06-25", required = true)
   private LocalDate data;
 

@@ -1,0 +1,13 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: financeiro-backend
+    ports:
+      - "3000:3000"
+    networks:
+      - financeiro-net
+
+networks:
+  financeiro-net:

@@ -23,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.financeiro.backend.domain.entitys.LancamentoFinanceiro;
+import com.financeiro.backend.domain.entitys.Usuario;
 import com.financeiro.backend.domain.repositories.LancamentoFinanceiroRepository;
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroRequestDTO;
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroResponseDTO;
@@ -34,6 +35,9 @@ public class LancamentoFinanceiroServiceTest {
   
   @Mock
   private LancamentoFinanceiroRepository lancamentoFinanceiroRepository;
+
+  @Mock
+  private AuthService authService;
 
   @InjectMocks
   private LancamentoFinanceiroService lancamentoFinanceiroService;
@@ -49,6 +53,14 @@ public class LancamentoFinanceiroServiceTest {
     requestDTO.setCategoria("Trabalho");
     requestDTO.setData(LocalDate.now());
 
+    // Simula o usuário autenticado
+    Usuario usuarioMock = new Usuario();
+    usuarioMock.setId(1L);
+    usuarioMock.setEmail("teste@teste.com");
+    usuarioMock.setSenha("senha123");
+
+    when(authService.getUsuarioLogado()).thenReturn(usuarioMock);
+
     // LancamentoFinanceiro entity = LancamentoFinanceiroMapper.toEntity(requestDTO);
     // Simulando o retorno do banco, que atribui o ID
     LancamentoFinanceiro entityComId = new LancamentoFinanceiro();
@@ -58,8 +70,7 @@ public class LancamentoFinanceiroServiceTest {
     entityComId.setTipo(requestDTO.getTipo());
     entityComId.setCategoria(requestDTO.getCategoria());
     entityComId.setData(requestDTO.getData());
-
-    // LancamentoFinanceiroResponseDTO responseDTO = LancamentoFinanceiroMapper.toResponseDTO(entityComId);
+    entityComId.setUsuario(usuarioMock);
 
     when(lancamentoFinanceiroRepository.save(argThat(l -> 
       l.getDescricao().equals(requestDTO.getDescricao()) &&
@@ -80,6 +91,7 @@ public class LancamentoFinanceiroServiceTest {
     assertEquals(entityComId.getCategoria(), resultado.getCategoria());
     assertEquals(entityComId.getData(), resultado.getData());
 
+    verify(authService, times(1)).getUsuarioLogado();
     verify(lancamentoFinanceiroRepository, times(1)).save(any(LancamentoFinanceiro.class));
   }
 
