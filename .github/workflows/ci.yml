@@ -34,6 +34,7 @@ jobs:
 
       - name: Build e testes
         run: mvn clean verify
+        working-directory: ./backend
 
       - name: Executar análise SonarQube
         env:
@@ -42,3 +43,4 @@ jobs:
           -Dsonar.projectKey=financeiro-api \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+        working-directory: ./backend
