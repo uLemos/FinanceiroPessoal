@@ -1,5 +1,7 @@
 # 👉 Arquivos e pastas geradas pelo Maven
 target/
+target/jacoco.exec
+target/site/jacoco/
 .mvn/wrapper/maven-wrapper.jar
 pom.xml.tag
 pom.xml.releaseBackup
@@ -52,4 +54,6 @@ docker-compose*.local.yml
 .DS_Store
 Thumbs.db
 
-# ⚠️ Evite adicionar arquivos sensíveis ou variáveis de ambiente aqui, sempre use .env com cautela.
+# 📊 SonarQube
+.scannerwork/
+

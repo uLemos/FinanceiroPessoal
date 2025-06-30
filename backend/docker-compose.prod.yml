@@ -15,7 +15,19 @@ services:
       - financeiro-net
     env_file:
       - .env
-
+  
+  sonarqube:
+    image: sonarqube:community
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+      
   backend:
     depends_on:
       - db
@@ -33,6 +45,9 @@ services:
 
 volumes:
   db_data:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
 
 networks:
   financeiro-net:

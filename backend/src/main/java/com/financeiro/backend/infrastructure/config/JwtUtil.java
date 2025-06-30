@@ -25,6 +25,7 @@ public class JwtUtil {
   public String gerarToken(Usuario usuario) {
     return Jwts.builder()
             .setSubject(usuario.getEmail())
+            .claim("roles", usuario.getRoles())
             .setIssuedAt(new Date())
             .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
