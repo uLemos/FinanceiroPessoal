@@ -1,3 +1,5 @@
+# Testando execução do CI
+
 name: CI Pipeline
 
 on:
