@@ -34,6 +34,8 @@ jobs:
         run: mvn clean verify
 
       - name: Executar análise SonarQube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn sonar:sonar \
           -Dsonar.projectKey=financeiro-api \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
