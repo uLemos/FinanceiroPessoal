@@ -35,6 +35,6 @@ jobs:
 
       - name: Executar análise SonarQube
         run: mvn sonar:sonar \
-          -Dsonar.projectKey=financeiro-backend \
+          -Dsonar.projectKey=financeiro-api \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
