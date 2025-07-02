@@ -51,4 +51,10 @@ jobs:
       - name: Build da imagem Docker
         working-directory: ./backend
         run: docker build -t financeiro-api:latest .
+
+      - name: Deploy no Railway
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          railway login --token ${{ secrets.RAILWAY_TOKEN }}
+          railway up --service ${{ secrets.RAILWAY_SERVICE_ID }}
   
