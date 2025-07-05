@@ -47,10 +47,16 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn sonar:sonar -Dsonar.projectKey=uLemos_FinanceiroPessoal -Dsonar.organization=ulemos -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=${{ secrets.SONAR_TOKEN }}
-        
+      
+      - name: Login no Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
       - name: Build da imagem Docker
         working-directory: ./backend
         run: docker build -t financeiro-api:latest .
+
+      - name: Push da imagem para Docker Hub
+        run: docker push ulemooss/financeiro-api:latest
 
       - name: Instalar Railway CLI
         run: npm install -g @railway/cli
