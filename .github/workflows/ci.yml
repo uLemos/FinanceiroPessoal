@@ -62,7 +62,7 @@ jobs:
         run: npm install -g @railway/cli
 
       - name: Deploy para Railway
-        working-directory: ./backend
+        working-directory: .
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: railway up --service FinanceiroPessoal --environment production --path-as-root ./backend
