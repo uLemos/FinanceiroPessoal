@@ -65,6 +65,7 @@ jobs:
         working-directory: ./backend
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: railway up --service FinanceiroPessoal --environment production
+        run: railway up --service FinanceiroPessoal --environment production --path ./backend
+
 
   
