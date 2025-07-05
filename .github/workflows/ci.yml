@@ -53,7 +53,7 @@ jobs:
 
       - name: Build da imagem Docker
         working-directory: ./backend
-        run: docker build -t financeiro-api:latest .
+        run: docker build -t ulemooss/financeiro-api:latest .
 
       - name: Push da imagem para Docker Hub
         run: docker push ulemooss/financeiro-api:latest
