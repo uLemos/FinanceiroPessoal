@@ -4,7 +4,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT;
 
 async function getJwtToken() {
   const response = await axios.post(
