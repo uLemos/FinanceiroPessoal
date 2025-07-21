@@ -61,6 +61,26 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
   }
 
+  @ExceptionHandler(IllegalArgumentException.class)
+  public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
+      ApiError apiError = new ApiError(
+          HttpStatus.BAD_REQUEST,
+          ex.getMessage(),
+          request.getDescription(false).replace("uri=", "")
+      );
+      return ResponseEntity.badRequest().body(apiError);
+  }
+
+  @ExceptionHandler(IllegalStateException.class)
+  public ResponseEntity<ApiError> handleIllegalState(IllegalStateException ex, WebRequest request) {
+      ApiError apiError = new ApiError(
+          HttpStatus.CONFLICT,
+          ex.getMessage(),
+          request.getDescription(false).replace("uri=", "")
+      );
+      return ResponseEntity.status(HttpStatus.CONFLICT).body(apiError);
+  }
+
   public static class ApiError{
 
     private LocalDateTime timestamp;

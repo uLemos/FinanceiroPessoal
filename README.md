@@ -39,13 +39,15 @@ src
             ├── domain
             │   ├── entity
             │   ├── enums
-            │   └── repository
+            │   ├── repositories
+            │   └── specifications
             ├── application
-            │   └── usecase
-            ├── adapters
-            │   ├── controller
-            │   ├── dto
-            │   └── mapper
+            │   └── services
+            ├── web
+            │   ├── controllers
+            │   ├── dtos
+            │   ├── exceptions
+            │   └── mappers
             └── infrastructure
                 ├── persistence
                 └── config
@@ -115,11 +117,11 @@ http://localhost:8080/swagger-ui.html
 
 ## \:construction: Em desenvolvimento
 
-* [ ] Login com JWT
+* [x] Login com JWT
 * [ ] Upload e leitura de extrato CSV
-* [ ] Geração de gráficos com dados financeiros
-* [ ] Docker Compose
-* [ ] Hospedagem na nuvem
+* [x] Geração de gráficos com dados financeiros
+* [x] Docker Compose
+* [x] Hospedagem na nuvem
 
 ---
 

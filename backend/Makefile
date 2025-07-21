@@ -5,6 +5,14 @@ ifneq (,$(wildcard .env))
 	export
 endif
 
+# Targets de Hom
+
+up-dev:
+	docker-compose up --build
+
+down-dev:
+	docker-compose down -v
+
 # Targets de Prod
 
 up-prod:
