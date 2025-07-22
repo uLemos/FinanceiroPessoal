@@ -8,7 +8,7 @@ const PORT = process.env.PORT;
 
 async function getJwtToken() {
   const response = await axios.post(
-    'https://financeiropessoal-production.up.railway.app/auth/login', 
+    'https://financeiropessoal-production.up.railway.app/v1/api/auth/login', 
     {
       email: process.env.AUTH_EMAIL,
       senha: process.env.AUTH_PASSWORD,
