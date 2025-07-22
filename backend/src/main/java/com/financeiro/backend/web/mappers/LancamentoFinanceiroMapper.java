@@ -5,6 +5,8 @@ import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFi
 import com.financeiro.backend.web.dtos.entitys.lancamentoFinanceiro.LancamentoFinanceiroResponseDTO;
 
 public class LancamentoFinanceiroMapper {
+
+  private LancamentoFinanceiroMapper(){}
   
   public static LancamentoFinanceiro toEntity(LancamentoFinanceiroRequestDTO dto){
     LancamentoFinanceiro entity = new LancamentoFinanceiro();

@@ -1,6 +1,5 @@
 package com.financeiro.backend.web.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,12 +7,10 @@ import com.financeiro.backend.application.services.AuthService;
 import com.financeiro.backend.web.dtos.auth.AuthRequestDTO;
 import com.financeiro.backend.web.dtos.auth.AuthResponseDTO;
 import com.financeiro.backend.web.dtos.auth.RegisterRequestDTO;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -22,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Tag(name = "Autenticação", description = "Endpoints para registro e login de usuários")
 public class AuthController {
   
-  @Autowired
-  private AuthService authService;
+  private final AuthService authService;
+
+  public AuthController(AuthService authService) {
+    this.authService = authService;
+  }
 
   @Operation(summary = "Registrar novo usuário", description = "Realiza o cadastro de um novo usuário no sistema.")
   @ApiResponses(value = {

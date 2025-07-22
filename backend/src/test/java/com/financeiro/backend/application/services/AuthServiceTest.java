@@ -22,7 +22,7 @@ import com.financeiro.backend.domain.repositories.UsuarioRespository;
 import com.financeiro.backend.infrastructure.config.JwtUtil;
 
 @ExtendWith(MockitoExtension.class)
-public class AuthServiceTest {
+class AuthServiceTest {
   
   @Mock
   private UsuarioRespository usuarioRespository;
@@ -57,7 +57,6 @@ public class AuthServiceTest {
     String tokenGerado = authService.autenticar(email, senha);
 
     //Assert
-
     assertEquals(tokenEsperado, tokenGerado);
     verify(usuarioRespository, times(1)).findByEmail(email);
     verify(passwordEncoder, times(1)).matches(senha, senhaCriptografada);
@@ -110,15 +109,6 @@ public class AuthServiceTest {
       usuario.getSenha().equals(senhaCriptografada) &&
       usuario.getRoles().equals(role)
     ));
-
-    // ArgumentCaptor<Usuario> captor = ArgumentCaptor.forClass(Usuario.class);
-    // verify(usuarioRespository).save(captor.capture());
-
-    // Usuario usuarioSalvo = captor.getValue();
-
-    // assertEquals(nome, usuarioSalvo.getNome());
-    // assertEquals(email, usuarioSalvo.getEmail());
-    // assertEquals(senhaCriptografada, usuarioSalvo.getSenha());
   }
 
   @Test

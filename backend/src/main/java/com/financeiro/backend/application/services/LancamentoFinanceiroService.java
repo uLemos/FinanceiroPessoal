@@ -42,7 +42,6 @@ public class LancamentoFinanceiroService {
 
   @Transactional(readOnly = true)
   public Page<LancamentoFinanceiroResponseDTO> buscarPorFiltros(LocalDate dataInicio, LocalDate dataFim, String categoria, String tipo, Pageable pageable){
-    // List<LancamentoFinanceiro> lancamentos = lancamentoFinanceiroRepository.buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
     Specification<LancamentoFinanceiro> spec = 
       FiltrosLancamentoSpecification.comCategoria(categoria)
       .and(FiltrosLancamentoSpecification.comTipo(tipo))

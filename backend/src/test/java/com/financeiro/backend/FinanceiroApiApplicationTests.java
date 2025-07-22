@@ -11,6 +11,6 @@ class FinanceiroApiApplicationTests {
 
 	@Test
 	void contextLoads() {
+		//Sem uso no momento.
 	}
-
 }

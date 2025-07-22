@@ -1,7 +1,7 @@
 package com.financeiro.backend.infrastructure.config;
 
 import java.io.IOException;
-
+import java.util.logging.Logger;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +20,7 @@ public class JwtFilter extends OncePerRequestFilter{
   
   private final JwtUtil jwtUtil;
   private final CustomUserDetailsService customUserDetailsService;
+  private final Logger log = Logger.getLogger(getClass().getName());
 
   public JwtFilter(JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
     this.jwtUtil = jwtUtil;
@@ -40,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter{
       try {
         email = jwtUtil.extrairEmail(token);
       } catch (Exception e) {
-        System.out.println("Token inválido ou expirado: " + e.getMessage());
+        log.info("Token inválido ou expirado: " + e.getMessage());
         filterChain.doFilter(request, response);
         return;
       }

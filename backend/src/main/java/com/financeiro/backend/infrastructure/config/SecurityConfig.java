@@ -12,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import com.financeiro.backend.application.services.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
@@ -20,15 +19,13 @@ import com.financeiro.backend.application.services.CustomUserDetailsService;
 public class SecurityConfig {
 
   private final JwtFilter jwtFilter;
-  private final CustomUserDetailsService customUserDetailsService;
 
-  public SecurityConfig(JwtFilter jwtFilter, CustomUserDetailsService customUserDetailsService) {
+  public SecurityConfig(JwtFilter jwtFilter) {
     this.jwtFilter = jwtFilter;
-    this.customUserDetailsService = customUserDetailsService;
   }
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
       .csrf(csrf -> csrf.disable())
       .authorizeHttpRequests( auth -> auth
@@ -42,12 +39,12 @@ public class SecurityConfig {
   }
 
   @Bean
-  public PasswordEncoder passwordEncoder(){
+  PasswordEncoder passwordEncoder(){
     return new BCryptPasswordEncoder();
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+  AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
     return configuration.getAuthenticationManager();
   }
 }

@@ -21,7 +21,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-
 import com.financeiro.backend.domain.entitys.LancamentoFinanceiro;
 import com.financeiro.backend.domain.entitys.Usuario;
 import com.financeiro.backend.domain.repositories.LancamentoFinanceiroRepository;
@@ -31,7 +30,7 @@ import com.financeiro.backend.web.dtos.entitys.relatorioResumo.RelatorioPorCateg
 import com.financeiro.backend.web.dtos.entitys.relatorioResumo.RelatorioResumoDTO;
 
 @ExtendWith(MockitoExtension.class)
-public class LancamentoFinanceiroServiceTest {
+class LancamentoFinanceiroServiceTest {
   
   @Mock
   private LancamentoFinanceiroRepository lancamentoFinanceiroRepository;
@@ -61,7 +60,6 @@ public class LancamentoFinanceiroServiceTest {
 
     when(authService.getUsuarioLogado()).thenReturn(usuarioMock);
 
-    // LancamentoFinanceiro entity = LancamentoFinanceiroMapper.toEntity(requestDTO);
     // Simulando o retorno do banco, que atribui o ID
     LancamentoFinanceiro entityComId = new LancamentoFinanceiro();
     entityComId.setId(1L);
@@ -94,45 +92,6 @@ public class LancamentoFinanceiroServiceTest {
     verify(authService, times(1)).getUsuarioLogado();
     verify(lancamentoFinanceiroRepository, times(1)).save(any(LancamentoFinanceiro.class));
   }
-
-  // @Test
-  // void deveBuscarLancamentoPorFiltro(){
-  //   //Arrange
-  //   LocalDate dataInicio = LocalDate.of(2025, 6, 1);
-  //   LocalDate dataFim = LocalDate.of(2025, 6, 30);
-  //   String categoria = "Moradia";
-  //   String tipo = "Despesa";
-
-  //   LancamentoFinanceiro lancamento1 = new LancamentoFinanceiro();
-  //   lancamento1.setId(1L);
-  //   lancamento1.setDescricao("Aluguel");
-  //   lancamento1.setValor(new BigDecimal("1200.00"));
-  //   lancamento1.setTipo("Despesa");
-  //   lancamento1.setCategoria("Moradia");
-  //   lancamento1.setData(LocalDate.of(2025, 6, 5));
-
-  //   LancamentoFinanceiro lancamento2 = new LancamentoFinanceiro();
-  //   lancamento2.setId(2L);
-  //   lancamento2.setDescricao("Condomínio");
-  //   lancamento2.setValor(new BigDecimal("300.00"));
-  //   lancamento2.setTipo("Despesa");
-  //   lancamento2.setCategoria("Moradia");
-  //   lancamento2.setData(LocalDate.of(2025, 6, 10));
-
-  //   List<LancamentoFinanceiro> mockLancamentos = Arrays.asList(lancamento1, lancamento2);
-
-  //   when(lancamentoFinanceiroRepository.buscarPorFiltros(dataInicio, dataFim, categoria, tipo)).thenReturn(mockLancamentos);
-
-  //   //Act
-  //   List<LancamentoFinanceiroResponseDTO> resultado = lancamentoFinanceiroService.buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
-
-  //   //Assert
-  //   assertEquals(2, resultado.size());
-  //   assertEquals("Aluguel", resultado.get(0).getDescricao());
-  //   assertEquals("Condomínio", resultado.get(1).getDescricao());
-
-  //   verify(lancamentoFinanceiroRepository, times(1)).buscarPorFiltros(dataInicio, dataFim, categoria, tipo);
-  // }
 
   @SuppressWarnings("unchecked")
   @Test

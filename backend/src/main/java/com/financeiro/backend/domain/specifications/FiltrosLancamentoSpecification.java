@@ -5,6 +5,9 @@ import org.springframework.data.jpa.domain.Specification;
 import com.financeiro.backend.domain.entitys.LancamentoFinanceiro;
 
 public class FiltrosLancamentoSpecification {
+  
+  private FiltrosLancamentoSpecification(){}
+
   public static Specification<LancamentoFinanceiro> comCategoria(String categoria) {
     return (root, query, builder) ->
       categoria == null ? null : builder.equal(root.get("categoria"), categoria);
