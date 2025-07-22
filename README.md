@@ -25,7 +25,7 @@ API REST desenvolvida em Java com Spring Boot para controle financeiro pessoal. 
 * Bean Validation
 * Swagger (OpenAPI)
 * Maven
-* Docker *(em fase futura)*
+* Docker 
 
 ---
 
@@ -69,7 +69,7 @@ src
            |
            v
 +-----------------------+
-|    Use Cases (App)    |
+|    Services (App)    |
 +-----------------------+
            |
            v
