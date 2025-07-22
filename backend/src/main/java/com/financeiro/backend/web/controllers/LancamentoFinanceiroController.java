@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
-@RequestMapping("/api/lancamentos")
+@RequestMapping("/v1/api/lancamentos")
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Lançamentos Financeiros", description = "Endpoints para gerenciar lançamentos financeiros")
 public class LancamentoFinanceiroController {
